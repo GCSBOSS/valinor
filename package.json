@@ -1,0 +1,24 @@
+{
+  "name": "valinor",
+  "version": "0.1.0",
+  "description": "A library for writing uncluttered, easy to read field and schema validations.",
+  "main": "lib/main.js",
+  "author": "Guilherme C. Souza",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha -b --no-diff test/*.js",
+    "coverage": "nyc -r html -r text-summary mocha -b --no-diff test/*.js"
+  },
+  "keywords": [
+    "validation",
+    "library",
+    "complete",
+    "assert",
+    "schema",
+    "test",
+    "field",
+    "required",
+    "custom",
+    "api"
+  ]
+}
