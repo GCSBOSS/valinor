@@ -1,0 +1,12 @@
+{
+  "name": "valinor",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/main.js",
+  "author": "Guilherme C. Souza",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha -b --no-diff test/*.js",
+    "coverage": "nyc -r html -r text-summary mocha -b --no-diff test/*.js"
+  }
+}
