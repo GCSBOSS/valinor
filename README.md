@@ -1,6 +1,6 @@
 # [Valinor](https://gitlab.com/GCSBOSS/valinor)
 
-A library for writing uncluterred, easy to read field and schema validations.
+A library for writing uncluttered, easy to read field and schema validations.
 
 ## Get Started
 
