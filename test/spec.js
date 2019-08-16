@@ -1,7 +1,6 @@
 const assert = require('assert');
 const v = require('../lib/main.js');
 
-
 describe('Valinor', function(){
 
     it('Should ignore other validations when optional field is blank', function(){
@@ -37,6 +36,24 @@ describe('Valinor', function(){
             assert.doesNotThrow(() => {
                 assert.strictEqual(v.int.between(6, 8).assert(7), true);
             });
+        });
+
+    });
+
+    describe('Clipping Objects', function(){
+
+        it('Should throw exception when valinor is not a schema', function(){
+            assert.throws(() => v.int.clip({}), /non-schema/);
+        });
+
+        it('Should remove properties fom object when they are not present in schema', function(){
+            let r = v.schema({ a: v.opt.int }).clip({ b: true });
+            assert.strictEqual(typeof r.b, 'undefined');
+        });
+
+        it('Should accept JSON input', function(){
+            let r = v.json.schema({ a: v.opt.int }).clip('{"b":true}');
+            assert.strictEqual(typeof r.b, 'undefined');
         });
 
     });
@@ -114,13 +131,13 @@ describe('Valinor', function(){
         });
 
         it('Should validate number greater than or equal to', function(){
-            assert.strictEqual(v.gte(0).test(0), true);
-            assert(v.gte(2.2).test(1) !== true);
+            assert.strictEqual(v.min(0).test(0), true);
+            assert(v.min(2.2).test(1) !== true);
         });
 
         it('Should validate number less than or equal to', function(){
-            assert.strictEqual(v.lte(2).test(2), true);
-            assert(v.lte(1).test(1.5) !== true);
+            assert.strictEqual(v.max(2).test(2), true);
+            assert(v.max(1).test(1.5) !== true);
         });
 
         it('Should validate equality', function(){
@@ -234,15 +251,11 @@ describe('Valinor', function(){
         it('Should validate string max size', function(){
             assert.strictEqual(v.max(1).test('a'), true);
             assert(v.max(2).test('bbb') !== true);
-            assert.strictEqual(v.maxEx(3).test('cc'), true);
-            assert(v.maxEx(4).test('dddd') !== true);
         });
 
         it('Should validate string min size', function(){
             assert.strictEqual(v.min(1).test('a'), true);
             assert(v.min(2).test('b') !== true);
-            assert.strictEqual(v.minEx(3).test('cccc'), true);
-            assert(v.minEx(4).test('dddd') !== true);
         });
 
         it('Should validate string size range', function(){
@@ -281,6 +294,10 @@ describe('Valinor', function(){
             assert(v.hasnt('d').test({d: true}) !== true);
         });
 
+        it('Should fail when schema fields are not Valinors', function(){
+            assert.throws(() => v.schema({ a: true }) );
+        });
+
         it('Should recursively validate object values as Valinors', function(){
             let subject = { a: true, b: 9, c: '' };
             let schema = v.obj.schema({
@@ -291,6 +308,12 @@ describe('Valinor', function(){
             assert.strictEqual(schema.test(subject), true);
             subject.c = 'hey';
             assert(schema.test(subject) !== true);
+        });
+
+        it('Should accept JSON input on schema validation', function(){
+            let subject = '{"a":true}';
+            let schema = v.json.schema({ a: v.bool });
+            assert.strictEqual(schema.test(subject), true);
         });
 
     });
