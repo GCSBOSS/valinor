@@ -325,10 +325,10 @@ describe('Valinor', function(){
             assert(v.fn('noop', i => i).test(false) !== true);
         });
 
-        it('Should bind sent context to custom validation function', function(){
+        it('Should bind sent context to all custom validations of the Valinor', function(){
             assert.strictEqual(v.fn('noop', function(){
                 return this.a;
-            }, { a: true }).test(true), true);
+            }).test(true, { a: true }), true);
         });
 
     });
