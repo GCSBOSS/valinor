@@ -57,10 +57,10 @@ schemaWithOpt.assert({
 });
 
 // Validate according to arbitrary function.
-let mine = v.fn( i => i == 'foobar', 'your function will be bound to this argument' );
+let mine = v.fn( i => i == 'foobar' );
 console.log(
-    mine.test('foo'),
-    mine.test('foobar')
+    mine.test('foo', 'your function will be bound to this argument'),
+    mine.test('foobar', 'your function will be bound to this argument')
 );
 
 ```
