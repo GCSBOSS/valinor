@@ -316,6 +316,17 @@ describe('Valinor', function(){
             assert.strictEqual(schema.test(subject), true);
         });
 
+        it('Should propagate \'fn\' context to all fields', function(){
+            let subject = { a: 12 };
+            let schema = v.obj.schema({
+                a: v.fn('foo', function(){
+                    assert('bar' in this);
+                    return true;
+                })
+            });
+            schema.test(subject, { bar: 'abc'});
+        });
+
     });
 
     describe('Custom Validation', function(){
