@@ -38,6 +38,13 @@ describe('Valinor', function(){
             });
         });
 
+        it('Should assert with promises when async custom function is present', function(){
+            var afn = data =>
+                new Promise(resolve => setTimeout(() => resolve(data === 'foobar'), 600));
+            assert.rejects(v.fn('noop', afn).assert('bar'));
+            assert.doesNotReject(v.fn('noop', afn).assert('foobar'));
+        });
+
     });
 
     describe('Clipping Objects', function(){
@@ -327,6 +334,20 @@ describe('Valinor', function(){
             schema.test(subject, { bar: 'abc'});
         });
 
+        it('Should work async when any child has async custom function validation', async function(){
+            var afn = data =>
+                new Promise(resolve => setTimeout(() => resolve(data === 'foobar'), 600));
+
+            let subject = { a: 'foobar', b: 9 };
+            let schema = v.obj.schema({
+                a: v.fn('async', afn),
+                b: v.int.max(9)
+            });
+            assert.strictEqual(await schema.test(subject), true);
+            subject.a = 'bar';
+            assert(await schema.test(subject) !== true);
+        });
+
     });
 
     describe('Custom Validation', function(){
@@ -340,6 +361,15 @@ describe('Valinor', function(){
             assert.strictEqual(v.fn('noop', function(){
                 return this.a;
             }).test(true, { a: true }), true);
+        });
+
+        it('Should validate according to given async function', async function(){
+
+            var afn = data =>
+                new Promise(resolve => setTimeout(() => resolve(data === 'foobar'), 600));
+
+            assert.strictEqual(await v.fn('noop', afn).test('foobar'), true);
+            assert(await v.fn('noop', afn).test('bar') !== true);
         });
 
     });
