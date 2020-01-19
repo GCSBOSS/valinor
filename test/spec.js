@@ -317,6 +317,20 @@ describe('Valinor', function(){
             assert(schema.test(subject) !== true);
         });
 
+        it('Should recursively validate Nested Schema Valinors', function(){
+            let subject = { m: { a: true, b: 9 }, c: '' };
+            let schema = v.obj.schema({
+                m: v.schema({
+                    a: v.bool,
+                    b: v.int.max(9)
+                }),
+                c: v.opt.num
+            });
+            assert.strictEqual(schema.test(subject), true);
+            subject.m = undefined;
+            assert(schema.test(subject) !== true);
+        });
+
         it('Should accept JSON input on schema validation', function(){
             let subject = '{"a":true}';
             let schema = v.json.schema({ a: v.bool });
