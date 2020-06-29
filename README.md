@@ -36,9 +36,6 @@ result = schema.test({
     birth: new Date('1999-01-01')
 });
 
-// Prepare valinor to parse a JSON input.
-schema.json.test("{\"totally\":\"invalid\"}");
-
 // Remove an object's properties that are not present in the schema.
 let coolData = schema.clip("{\"totally\":\"invalid\"}");
 
@@ -85,7 +82,6 @@ so we can collaborate effectively.
 
 ## Method Reference
 
-- `json`: Signal for object functions to parse JSON strings.
 - `test ( input )`: Returns true if the input is valid. Returns an array or problems otherwise.
 - `clip ( input )`: Fails if the Valinor is not an schema. Return the ipunt object with only the properties present on the schema Valinor.
 

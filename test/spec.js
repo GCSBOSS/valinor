@@ -310,12 +310,6 @@ describe('Valinor', function(){
             assert.strictEqual(schema.test(subject).ok, false);
         });
 
-        it('Should accept JSON input on schema validation', function(){
-            let subject = '{"a":true}';
-            let schema = v.json.schema({ a: v.bool });
-            assert.strictEqual(schema.test(subject).ok, true);
-        });
-
     });
 
 });
