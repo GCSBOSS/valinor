@@ -24,29 +24,6 @@ describe('Valinor', function(){
         assert.strictEqual(typeof v.eq, typeof v.dif);
     });
 
-    describe('Asserting', function(){
-
-        it('Should throw exception when asserting falsehoods', function(){
-            assert.throws(() => {
-                v.int.min(7).max(8).assert(9);
-            }, /limit/);
-        });
-
-        it('Should not throw when asserting truths', function(){
-            assert.doesNotThrow(() => {
-                assert.strictEqual(v.int.between(6, 8).assert(7), true);
-            });
-        });
-
-        it('Should assert with promises when async custom function is present', function(){
-            var afn = data =>
-                new Promise(resolve => setTimeout(() => resolve(data === 'foobar'), 600));
-            assert.rejects(v.fn('noop', afn).assert('bar'));
-            assert.doesNotReject(v.fn('noop', afn).assert('foobar'));
-        });
-
-    });
-
     describe('Clipping Objects', function(){
 
         it('Should throw exception when valinor is not a schema', function(){
@@ -335,55 +312,6 @@ describe('Valinor', function(){
             let subject = '{"a":true}';
             let schema = v.json.schema({ a: v.bool });
             assert.strictEqual(schema.test(subject), true);
-        });
-
-        it('Should propagate \'fn\' context to all fields', function(){
-            let subject = { a: 12 };
-            let schema = v.obj.schema({
-                a: v.fn('foo', function(){
-                    assert('bar' in this);
-                    return true;
-                })
-            });
-            schema.test(subject, { bar: 'abc'});
-        });
-
-        it('Should work async when any child has async custom function validation', async function(){
-            var afn = data =>
-                new Promise(resolve => setTimeout(() => resolve(data === 'foobar'), 600));
-
-            let subject = { a: 'foobar', b: 9 };
-            let schema = v.obj.schema({
-                a: v.fn('async', afn),
-                b: v.int.max(9)
-            });
-            assert.strictEqual(await schema.test(subject), true);
-            subject.a = 'bar';
-            assert(await schema.test(subject) !== true);
-        });
-
-    });
-
-    describe('Custom Validation', function(){
-
-        it('Should validate according to given function', function(){
-            assert.strictEqual(v.fn('noop', i => i).test(true), true);
-            assert(v.fn('noop', i => i).test(false) !== true);
-        });
-
-        it('Should bind sent context to all custom validations of the Valinor', function(){
-            assert.strictEqual(v.fn('noop', function(){
-                return this.a;
-            }).test(true, { a: true }), true);
-        });
-
-        it('Should validate according to given async function', async function(){
-
-            var afn = data =>
-                new Promise(resolve => setTimeout(() => resolve(data === 'foobar'), 600));
-
-            assert.strictEqual(await v.fn('noop', afn).test('foobar'), true);
-            assert(await v.fn('noop', afn).test('bar') !== true);
         });
 
     });

@@ -42,26 +42,16 @@ schema.json.test("{\"totally\":\"invalid\"}");
 // Remove an object's properties that are not present in the schema.
 let coolData = schema.clip("{\"totally\":\"invalid\"}");
 
-// Tell valinor to throw error when validation fails.
-v.num.max(7).assert(7.1);
-
 // Ignore empty/null values on optional valinors.
 let schemaWithOpt = v.schema({
     firstName: v.str,
     lastName: v.opt.str
 });
 
-schemaWithOpt.assert({
+console.log(schemaWithOpt.test({
     firstName: 'John',
     lastName: null
-});
-
-// Validate according to arbitrary function.
-let mine = v.fn( i => i == 'foobar' );
-console.log(
-    mine.test('foo', 'your function will be bound to this argument'),
-    mine.test('foobar', 'your function will be bound to this argument')
-);
+}));
 
 ```
 
@@ -92,7 +82,6 @@ so we can collaborate effectively.
 
 - `json`: Signal for object functions to parse JSON strings.
 - `test ( input )`: Returns true if the input is valid. Returns an array or problems otherwise.
-- `assert ( input )`: Returns true if the input is valid. Throws a Validation Error otherwise.
 - `clip ( input )`: Fails if the Valinor is not an schema. Return the ipunt object with only the properties present on the schema Valinor.
 
 ## Rule Reference
@@ -119,7 +108,6 @@ so we can collaborate effectively.
 - `today ( date )`: Check if a date time is today.
 - `schema ( object )`: Check if object's keys follows all their respective Valinor rules.
 - `opt`: Mark the Valinor as optional, so skipping any validations for null, undefined or '' values.
-- `fn ( function(input), bindContext )`: Check if the given function returns true.
 - `notIn ( array )`: Check if value cannot be found inside given array.
 - `notNum`, `notBool`, `notDate`, `notObj`, `notStr`, `notFunc`, `notArr`: Reverse type checkers. Read counterparts above for more info.
 - `notMatch ( regex )`: Check if value does not matche the given regex.
