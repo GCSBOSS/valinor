@@ -36,14 +36,8 @@ result = schema.test({
     birth: new Date('1999-01-01')
 });
 
-// Prepare valinor to parse a JSON input.
-schema.json.test("{\"totally\":\"invalid\"}");
-
 // Remove an object's properties that are not present in the schema.
 let coolData = schema.clip("{\"totally\":\"invalid\"}");
-
-// Tell valinor to throw error when validation fails.
-v.num.max(7).assert(7.1);
 
 // Ignore empty/null values on optional valinors.
 let schemaWithOpt = v.schema({
@@ -51,19 +45,34 @@ let schemaWithOpt = v.schema({
     lastName: v.opt.str
 });
 
-schemaWithOpt.assert({
+console.log(schemaWithOpt.test({
     firstName: 'John',
     lastName: null
+}));
+
+// Ensure you get only valdated keys of an object.
+console.log(schemaWithOpt.test({
+    firstName: 'John',
+    unvalidated: 'This should not show up',
+    lastName: 'Doe'
+}).final);
+
+// Define default values to show up in final object instead of blank optionals
+let schemaWithOpt = v.schema({
+    firstName: v.str,
+    lastName: v.opt.str.def('Doe')
 });
 
-// Validate according to arbitrary function.
-let mine = v.fn( i => i == 'foobar' );
-console.log(
-    mine.test('foo', 'your function will be bound to this argument'),
-    mine.test('foobar', 'your function will be bound to this argument')
-);
+console.log(schemaWithOpt.test({
+    firstName: 'John'
+}).final);
 
 ```
+
+`v.test()` method output is always an object with the following keys:
+
+- `ok`: Whether validation passed.
+- `errs`: Array containing all found validation errors. Empty array if all passed.
 
 Check the [full rule reference](#rule-reference) for all the validations available.
 
@@ -90,10 +99,7 @@ so we can collaborate effectively.
 
 ## Method Reference
 
-- `json`: Signal for object functions to parse JSON strings.
 - `test ( input )`: Returns true if the input is valid. Returns an array or problems otherwise.
-- `assert ( input )`: Returns true if the input is valid. Throws a Validation Error otherwise.
-- `clip ( input )`: Fails if the Valinor is not an schema. Return the ipunt object with only the properties present on the schema Valinor.
 
 ## Rule Reference
 
@@ -119,7 +125,6 @@ so we can collaborate effectively.
 - `today ( date )`: Check if a date time is today.
 - `schema ( object )`: Check if object's keys follows all their respective Valinor rules.
 - `opt`: Mark the Valinor as optional, so skipping any validations for null, undefined or '' values.
-- `fn ( function(input), bindContext )`: Check if the given function returns true.
 - `notIn ( array )`: Check if value cannot be found inside given array.
 - `notNum`, `notBool`, `notDate`, `notObj`, `notStr`, `notFunc`, `notArr`: Reverse type checkers. Read counterparts above for more info.
 - `notMatch ( regex )`: Check if value does not matche the given regex.
@@ -130,3 +135,4 @@ so we can collaborate effectively.
 - `notFuture ( date )`: Check if a date is NOT in the future.
 - `notPast ( date )`: Check if a date is NOT in the past.
 - `notToday ( date )`: Check if a date time is NOT today.
+- `def ( value )`: Set a default value to show up on `final` object in case the valinor is optional and validates an empty value.
