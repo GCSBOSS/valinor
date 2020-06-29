@@ -55,6 +55,11 @@ console.log(schemaWithOpt.test({
 
 ```
 
+`v.test()` method output is always an object with the following keys:
+
+- `ok`: Whether validation passed.
+- `errs`: Array containing all found validation errors. Empty array if all passed.
+
 Check the [full rule reference](#rule-reference) for all the validations available.
 
 ## Reporting Bugs
