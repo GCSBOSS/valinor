@@ -50,6 +50,23 @@ console.log(schemaWithOpt.test({
     lastName: null
 }));
 
+// Ensure you get only valdated keys of an object.
+console.log(schemaWithOpt.test({
+    firstName: 'John',
+    unvalidated: 'This should not show up',
+    lastName: 'Doe'
+}).final);
+
+// Define default values to show up in final object instead of blank optionals
+let schemaWithOpt = v.schema({
+    firstName: v.str,
+    lastName: v.opt.str.def('Doe')
+});
+
+console.log(schemaWithOpt.test({
+    firstName: 'John'
+}).final);
+
 ```
 
 `v.test()` method output is always an object with the following keys:
@@ -83,7 +100,6 @@ so we can collaborate effectively.
 ## Method Reference
 
 - `test ( input )`: Returns true if the input is valid. Returns an array or problems otherwise.
-- `clip ( input )`: Fails if the Valinor is not an schema. Return the ipunt object with only the properties present on the schema Valinor.
 
 ## Rule Reference
 
@@ -119,3 +135,4 @@ so we can collaborate effectively.
 - `notFuture ( date )`: Check if a date is NOT in the future.
 - `notPast ( date )`: Check if a date is NOT in the past.
 - `notToday ( date )`: Check if a date time is NOT today.
+- `def ( value )`: Set a default value to show up on `final` object in case the valinor is optional and validates an empty value.

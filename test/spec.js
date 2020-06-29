@@ -24,24 +24,6 @@ describe('Valinor', function(){
         assert.strictEqual(typeof v.eq, typeof v.dif);
     });
 
-    describe('Clipping Objects', function(){
-
-        it('Should throw exception when valinor is not a schema', function(){
-            assert.throws(() => v.int.clip({}), /non-schema/);
-        });
-
-        it('Should remove properties fom object when they are not present in schema', function(){
-            let r = v.schema({ a: v.opt.int }).clip({ b: true });
-            assert.strictEqual(typeof r.b, 'undefined');
-        });
-
-        it('Should accept JSON input', function(){
-            let r = v.json.schema({ a: v.opt.int }).clip('{"b":true}');
-            assert.strictEqual(typeof r.b, 'undefined');
-        });
-
-    });
-
     describe('Type Checking', function(){
 
         it('Should validate integers', function(){
@@ -308,6 +290,33 @@ describe('Valinor', function(){
 
             subject.m = undefined;
             assert.strictEqual(schema.test(subject).ok, false);
+        });
+
+        it('Should ignore fields not present in schema', function(){
+            let subject = { m: { a: true, b: null }, c: 14 };
+            let schema = v.obj.schema({
+                m: v.schema({
+                    a: v.bool,
+                    b: v.opt.def(3).int.max(9)
+                })
+            });
+            let r = schema.test(subject);
+            assert.strictEqual(typeof r.final.c, 'undefined');
+        });
+
+        it('Should replace final with details', function(){
+            let subject = { m: { a: true, b: null }, c: '' };
+            let schema = v.obj.schema({
+                m: v.schema({
+                    a: v.bool,
+                    b: v.opt.def(3).int.max(9)
+                }),
+                c: v.opt.num.def(15.6)
+            });
+            let r = schema.test(subject);
+
+            assert.strictEqual(r.final.m.b, 3);
+            assert.strictEqual(r.final.c, 15.6);
         });
 
     });
