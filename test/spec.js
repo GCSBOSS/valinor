@@ -319,6 +319,19 @@ describe('Valinor', function(){
             assert.strictEqual(r.final.c, 15.6);
         });
 
+        it('Should mutate input date in a pipeline style', function(){
+            let obj = { foo: 'bar' };
+
+            assert.throws(() => v.alter());
+
+            let r = v.schema({
+                foo: v.str.alter(() => 24).num
+            }).test(obj);
+
+            assert.strictEqual(r.final.foo, 24);
+            assert.strictEqual(obj.foo, 'bar');
+        });
+
     });
 
 });

@@ -136,3 +136,4 @@ so we can collaborate effectively.
 - `notPast ( date )`: Check if a date is NOT in the past.
 - `notToday ( date )`: Check if a date time is NOT today.
 - `def ( value )`: Set a default value to show up on `final` object in case the valinor is optional and validates an empty value.
+- `alter ( fn )`: Mutates the input value acording to given funcion (`fn`) in a pipeline fashion before it reaches the next rule.
