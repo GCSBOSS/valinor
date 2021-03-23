@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v0.3.2] - 2021-03-23
+
+### Added
+- `every()` rule for matching every element in an array with a given Valinor
+- `some()` rule for to pick only matching elements form a given array
+
 ## [v0.3.1] - 2020-11-28
 
 ### Added
@@ -56,3 +62,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.2.1]: https://gitlab.com/GCSBOSS/valinor/-/tags/v0.2.1
 [v0.2.2]: https://gitlab.com/GCSBOSS/valinor/-/tags/v0.2.2
 [v0.3.0]: https://gitlab.com/GCSBOSS/valinor/-/tags/v0.3.0
+[v0.3.1]: https://gitlab.com/GCSBOSS/valinor/-/tags/v0.3.1
+[v0.3.2]: https://gitlab.com/GCSBOSS/valinor/-/tags/v0.3.2
