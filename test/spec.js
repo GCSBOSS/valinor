@@ -135,7 +135,7 @@ describe('Valinor', function(){
     describe('Date Validations', function(){
 
         it('Should validate equal dates', function(){
-            let d = new Date((new Date()).getTime() + 60000);
+            let d = new Date(new Date().getTime() + 60000);
             assert.strictEqual(v.eq(d).test(d).ok, true);
             assert.strictEqual(v.eq(d).test(new Date()).ok, false);
             assert.strictEqual(v.dif(d).test(new Date()).ok, true);
@@ -157,7 +157,7 @@ describe('Valinor', function(){
         });
 
         it('Should validate dates in the present day', function(){
-            let od = new Date((new Date()).getTime() + 60000);
+            let od = new Date(new Date().getTime() + 60000);
             assert.strictEqual(v.today.test(od).ok, true);
             assert.strictEqual(v.today.test('2000-10-10').ok, false);
             assert.strictEqual(v.notToday.test('9999-02-02').ok, true);
@@ -177,7 +177,7 @@ describe('Valinor', function(){
         });
 
         it('Should validate date in range', function(){
-            let d = new Date((new Date()).getTime() - 60000);
+            let d = new Date(new Date().getTime() - 60000);
             assert.strictEqual(v.between('2000-10-10', '9999-02-02').test(d).ok, true);
             assert.strictEqual(v.between(new Date().ok, '9999-02-02').test(d).ok, false);
         });
@@ -247,6 +247,30 @@ describe('Valinor', function(){
             assert.strictEqual(v.has('b').test(['a']).ok, false);
             assert.strictEqual(v.hasnt('c').test(['a', 'b']).ok, true);
             assert.strictEqual(v.hasnt('d').test(['a', 'd']).ok, false);
+        });
+
+        it('Should fail when matcher is not a Valinor', function(){
+            assert.throws(() => v.every(true));
+        });
+
+        it('Should success if all elements of array match a given valinor', function(){
+            assert.strictEqual(v.every(v.str).test(['a', 1]).ok, false);
+            assert.strictEqual(v.every(v.num).test([2.4, 1, 0]).ok, true);
+
+            let schema = v.obj.schema({
+                a: v.bool,
+                b: v.int
+            });
+
+            let data = [ { a: true, b: 8 }, { a: false } ];
+            assert.strictEqual(v.every(schema).test(data).ok, false);
+            data[1].b = 2;
+            assert.strictEqual(v.every(schema).test(data).ok, true);
+        });
+
+        it('Should success if any elements of array match a given valinor', function(){
+            assert.strictEqual(v.some(v.str).test([true, 1]).ok, false);
+            assert.strictEqual(v.some(v.num).test([2.4, true, 'str']).ok, true);
         });
 
     });

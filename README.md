@@ -124,6 +124,8 @@ so we can collaborate effectively.
 - `past ( date )`: Check if a date is in the past.
 - `today ( date )`: Check if a date time is today.
 - `schema ( object )`: Check if object's keys follows all their respective Valinor rules.
+- `every ( array )`: Check if all array elements match a given Valinor rules.
+- `some ( array )`: Check if any values of the array match given rules. Also picks only the valid values.
 - `opt`: Mark the Valinor as optional, so skipping any validations for null, undefined or '' values.
 - `notIn ( array )`: Check if value cannot be found inside given array.
 - `notNum`, `notBool`, `notDate`, `notObj`, `notStr`, `notFunc`, `notArr`: Reverse type checkers. Read counterparts above for more info.
