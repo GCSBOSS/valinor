@@ -9,6 +9,8 @@ include:
 
 # Make quality report downloadable
 code_quality:
+  rules:
+    - if: '$CI_COMMIT_TAG == null'
   artifacts:
     paths: [gl-code-quality-report.json]
 
@@ -18,6 +20,8 @@ sast:
 
 # Lint js files
 lint-js:
+  rules:
+    - if: '$CI_COMMIT_TAG == null'
   image: node
   stage: test
   tags:
